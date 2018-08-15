@@ -2770,6 +2770,10 @@ fbjs@^0.8.14, fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.9:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.18"
 
+fetch-dedupe@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/fetch-dedupe/-/fetch-dedupe-3.0.0.tgz#3703f4ace2a949d95bf2e28e69da97b27e845d8e"
+
 figures@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"
@@ -5733,6 +5737,13 @@ react-redux@^5.0.2:
     lodash "^4.17.5"
     lodash-es "^4.17.5"
     loose-envify "^1.1.0"
+    prop-types "^15.6.0"
+
+react-request@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/react-request/-/react-request-3.1.2.tgz#71473994c8a05e160f15919a6cf687435d70c97d"
+  dependencies:
+    fetch-dedupe "^3.0.0"
     prop-types "^15.6.0"
 
 react-test-renderer@16.3.1:

@@ -46,6 +46,21 @@ export default class App extends React.Component {
         number: "6",
         name: "Charizard",
         image: "https://www.serebii.net/sunmoon/pokemon/006.png"
+      },
+      {
+        number: "7",
+        name: "Squirtle",
+        image: "https://www.serebii.net/sunmoon/pokemon/007.png"
+      },
+      {
+        number: "8",
+        name: "Wartortle",
+        image: "https://www.serebii.net/sunmoon/pokemon/008.png"
+      },
+      {
+        number: "9",
+        name: "Blastoise",
+        image: "https://www.serebii.net/sunmoon/pokemon/009.png"
       }
     ]
   };
@@ -93,7 +108,7 @@ export default class App extends React.Component {
           transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={() => {
-            alert("Modal has been closed.");
+            this.setState({ modalVisible: false });
           }}
         >
           <View style={{ marginTop: 22 }}>
