@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { ListItem } from "react-native-elements";
 import {
   AppRegistry,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   Modal,
   TouchableHighlight
 } from "react-native";
+import PokeModal from "./pokeModal.js";
 
 export default class App extends React.Component {
   state = {
@@ -70,6 +70,10 @@ export default class App extends React.Component {
     this.setState({ modalVisible: true });
   };
 
+  closeModal() {
+    this.setState({ modalVisible: false });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -103,28 +107,10 @@ export default class App extends React.Component {
           )}
         />
 
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            this.setState({ modalVisible: false });
-          }}
-        >
-          <View style={{ marginTop: 22 }}>
-            <View>
-              <Text>Hello World!</Text>
-
-              <TouchableHighlight
-                onPress={() => {
-                  this.setState({ modalVisible: false });
-                }}
-              >
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </Modal>
+        <PokeModal
+          modalVisible={this.state.modalVisible}
+          closeModal={this.closeModal.bind(this)}
+        />
       </View>
     );
   }
