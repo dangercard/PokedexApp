@@ -1,3 +1,8 @@
+/*
+  Alejandro Deloach Rivera
+  Modal Class
+*/
+
 import React, { Component } from "react";
 import {
   StyleSheet,

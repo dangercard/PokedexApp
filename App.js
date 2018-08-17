@@ -1,3 +1,11 @@
+/*
+  Alejandro Deloach Rivera
+  PokedexApp v0.0.1
+  Main App Class
+
+*/
+
+// Import necessary components:
 import React, { Component } from "react";
 import {
   AppRegistry,
@@ -8,114 +16,175 @@ import {
   FlatList,
   TouchableOpacity,
   Modal,
-  TouchableHighlight
+  TouchableHighlight,
+  ActivityIndicator
 } from "react-native";
 import PokeModal from "./pokeModal.js";
+function ImageType1(props) {
+  var url = "https://www.serebii.net/sunmoon/pokemon/00" + props.index + ".png";
+  return (
+    <Image
+      style={{ width: 80, height: 80 }}
+      source={{
+        uri: url
+      }}
+    />
+  );
+}
 
-export default class App extends React.Component {
-  state = {
-    modalVisible: false,
+function ImageType2(props) {
+  var url = "https://www.serebii.net/sunmoon/pokemon/0" + props.index + ".png";
 
-    pokemon: [
-      {
-        number: "1",
-        name: "Bulbasaur",
-        image: "https://www.serebii.net/sunmoon/pokemon/001.png"
-      },
-      {
-        number: "2",
-        name: "Ivysaur",
-        image: "https://www.serebii.net/sunmoon/pokemon/002.png"
-      },
-      {
-        number: "3",
-        name: "Venusaur",
-        image: "https://www.serebii.net/sunmoon/pokemon/003.png"
-      },
-      {
-        number: "4",
-        name: "Charmander",
-        image: "https://www.serebii.net/sunmoon/pokemon/004.png"
-      },
-      {
-        number: "5",
-        name: "Charmeleon",
-        image: "https://www.serebii.net/sunmoon/pokemon/005.png"
-      },
-      {
-        number: "6",
-        name: "Charizard",
-        image: "https://www.serebii.net/sunmoon/pokemon/006.png"
-      },
-      {
-        number: "7",
-        name: "Squirtle",
-        image: "https://www.serebii.net/sunmoon/pokemon/007.png"
-      },
-      {
-        number: "8",
-        name: "Wartortle",
-        image: "https://www.serebii.net/sunmoon/pokemon/008.png"
-      },
-      {
-        number: "9",
-        name: "Blastoise",
-        image: "https://www.serebii.net/sunmoon/pokemon/009.png"
-      }
-    ]
-  };
+  return (
+    <Image
+      style={{ width: 80, height: 80 }}
+      source={{
+        uri: url
+      }}
+    />
+  );
+}
+function ImageType3(props) {
+  var url = "https://www.serebii.net/sunmoon/pokemon/" + props.index + ".png";
 
-  handleListTap = item => {
-    console.log(item.name);
-    this.setState({ modalVisible: true });
-  };
-
-  closeModal() {
-    this.setState({ modalVisible: false });
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Image
-          style={{ width: 100, height: 100 }}
-          source={{
-            uri:
-              "https://cdn.iconscout.com/icon/premium/png-512-thumb/pokeball-5-580785.png"
-          }}
-        />
-        <Text style={styles.textColor}>This is a Pokedex test!</Text>
-
-        <FlatList
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          style={styles.list}
-          data={this.state.pokemon}
-          keyExtractor={item => item.number}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.listItem}
-              onPress={() => this.handleListTap(item)}
-            >
-              <Image
-                style={{ width: 80, height: 80 }}
-                source={{
-                  uri: item.image
-                }}
-              />
-              <Text style={styles.textColor}>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
-
-        <PokeModal
-          modalVisible={this.state.modalVisible}
-          closeModal={this.closeModal.bind(this)}
-        />
-      </View>
-    );
+  return (
+    <Image
+      style={{ width: 80, height: 80 }}
+      source={{
+        uri: url
+      }}
+    />
+  );
+}
+function PokeImage(props) {
+  if (props.index <= 9) {
+    return <ImageType1 index={props.index} />;
+  } else if (props.index <= 99) {
+    return <ImageType2 index={props.index} />;
+  } else {
+    return <ImageType3 index={props.index} />;
   }
 }
 
+// Main App class:
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoading: true, // App load state.
+
+      modalVisible: false, // Modal default state.
+      dataSource: null
+    };
+  }
+
+  componentDidMount() {
+    return fetch("http://pokeapi.co/api/v2/pokemon/?limit=802")
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson.results
+        });
+      })
+
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  // List tap handler:
+  handleListTap = item => {
+    console.log(item.name);
+    this.setState({ modalVisible: true }); // Set modal to visible
+  };
+
+  // close modal handler:
+  closeModal() {
+    this.setState({ modalVisible: false }); // Set modal to hidden.
+  }
+
+  capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  // App Render method:
+  render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator />
+        </View>
+      );
+    } else {
+      return (
+        // Main container:
+        <View style={styles.container}>
+          {/* Pokeball icon.*/}
+          <Image
+            style={{ width: 100, height: 100 }}
+            source={{
+              uri:
+                "https://cdn.iconscout.com/icon/premium/png-512-thumb/pokeball-5-580785.png"
+            }}
+          />
+          {/* Test text.*/}
+          <Text style={styles.textColor}>This is a Pokedex test!</Text>
+
+          {/* Begin List */}
+          <FlatList
+            /* Separator Component.*/
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            /* List Style */
+            style={styles.list}
+            /* Set list data. */
+            data={this.state.dataSource}
+            /* Set unique key. */
+            keyExtractor={item => item.url}
+            /*On End list handler:*/
+            onEndReached={() => {
+              data.fetchMore({
+                variables: { offset: data.feed.length + 1 },
+                updateQuery: (previousResult, { fetchMoreResult }) => {
+                  // Don't do anything if there weren't any new items
+                  if (!fetchMoreResult || fetchMoreResult.feed.length === 0) {
+                    return previousResult;
+                  }
+                  return {
+                    // Append the new feed results to the old one
+                    feed: previousResult.feed.concat(fetchMoreResult.feed)
+                  };
+                }
+              });
+            }}
+            /* List item render: */
+            renderItem={({ item, index }) => (
+              <TouchableOpacity
+                style={styles.listItem}
+                onPress={() => this.handleListTap(item)}
+              >
+                <PokeImage index={index + 1} />
+                <Text style={styles.textColor}>
+                  {this.capitalize(item.name)}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+
+          {/* Add modal */}
+          <PokeModal
+            /* Modal props */
+            modalVisible={this.state.modalVisible}
+            closeModal={this.closeModal.bind(this)}
+          />
+        </View>
+      );
+    }
+  }
+}
+
+// Styles object:
 const styles = StyleSheet.create({
   container: {
     flex: 1,
