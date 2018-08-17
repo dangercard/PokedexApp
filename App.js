@@ -8,7 +8,6 @@
 // Import necessary components:
 import React, { Component } from "react";
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -75,7 +74,8 @@ export default class App extends React.Component {
       isLoading: true, // App load state.
 
       modalVisible: false, // Modal default state.
-      dataSource: null
+      dataSource: null,
+      searchInput: ""
     };
   }
 
@@ -139,25 +139,13 @@ export default class App extends React.Component {
             /* List Style */
             style={styles.list}
             /* Set list data. */
-            data={this.state.dataSource}
+            data={this.state.dataSource.filter(item =>
+              item.name.includes(this.state.searchInput)
+            )}
             /* Set unique key. */
             keyExtractor={item => item.url}
             /*On End list handler:*/
-            onEndReached={() => {
-              data.fetchMore({
-                variables: { offset: data.feed.length + 1 },
-                updateQuery: (previousResult, { fetchMoreResult }) => {
-                  // Don't do anything if there weren't any new items
-                  if (!fetchMoreResult || fetchMoreResult.feed.length === 0) {
-                    return previousResult;
-                  }
-                  return {
-                    // Append the new feed results to the old one
-                    feed: previousResult.feed.concat(fetchMoreResult.feed)
-                  };
-                }
-              });
-            }}
+
             /* List item render: */
             renderItem={({ item, index }) => (
               <TouchableOpacity
